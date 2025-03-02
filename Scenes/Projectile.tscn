@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://h8gx6805mtwf"]
+
+[ext_resource type="Script" uid="uid://emc7wk1f1sac" path="res://Projectile.cs" id="1_k1cl8"]
+[ext_resource type="Texture2D" uid="uid://bqal7v3xfedpy" path="res://laserBlue04.png" id="1_lal66"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_k1cl8"]
+radius = 7.0
+height = 38.0
+
+[node name="Projectile" type="Node2D"]
+script = ExtResource("1_k1cl8")
+
+[node name="ProjectileArea" type="Area2D" parent="."]
+position = Vector2(2.5, -20.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ProjectileArea"]
+position = Vector2(-2.5, 1.5)
+shape = SubResource("CapsuleShape2D_k1cl8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -19)
+texture = ExtResource("1_lal66")

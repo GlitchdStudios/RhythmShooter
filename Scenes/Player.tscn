@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://qcc4ju0faytf"]
+
+[ext_resource type="Script" uid="uid://di7aksevgjnkj" path="res://Player.cs" id="1_kpjcp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rpqav"]
+size = Vector2(64, 64)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Muzzle")]
+script = ExtResource("1_kpjcp")
+Muzzle = NodePath("Muzzle")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+scale = Vector2(32, 32)
+color = Color(0, 0.415686, 0.556863, 1)
+polygon = PackedVector2Array(1, -1, 1, 1, -1, 1, -1, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rpqav")
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(0, -32)
