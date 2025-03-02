@@ -7,7 +7,10 @@ public partial class Player : CharacterBody2D
 	[Export] public float FireRate = 0.2f;
 	[Export] public Node2D Muzzle;
 	private float _timeSinceLastShot;
-
+	
+	//These might be moved
+	private int _beatPercentage = 100;
+	
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = Velocity; // Get current velocity (important for CharacterBody2D)
@@ -53,22 +56,32 @@ public partial class Player : CharacterBody2D
 
 		if (beatVisualCue.IsOnBeat && Input.IsActionJustPressed("RhythmBlast"))
 		{
-			PackedScene projectileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Projectile.tscn");
-			Debug.Assert(projectileScene != null, "Could not load Projectile scene! Make sure Projectile.tscn exists in the 'Scenes' folder.");
-
-			int numberOfProjectiles = 5;
-			float spreadAngleDegrees = 30f;
-			float angleStepDegrees = spreadAngleDegrees / (numberOfProjectiles - 1);
-
-			for (int i = 0; i < numberOfProjectiles; i++)
+			_beatPercentage += 5;
+			if (_beatPercentage >= 100)
 			{
-				Projectile projectileInstance = projectileScene.Instantiate<Projectile>();
-				projectileInstance.Position = Muzzle.GlobalPosition;
-				float currentAngleRadians = Mathf.DegToRad(-spreadAngleDegrees / 2f + i * angleStepDegrees);
-				projectileInstance.Rotation = Muzzle.Rotation + currentAngleRadians;
-				projectileInstance.Scale = Vector2.One * 3;
-				GetParent().AddChild(projectileInstance);
+				PackedScene projectileScene = ResourceLoader.Load<PackedScene>("res://Scenes/Projectile.tscn");
+				Debug.Assert(projectileScene != null, "Could not load Projectile scene! Make sure Projectile.tscn exists in the 'Scenes' folder.");
+
+				int numberOfProjectiles = 5;
+				float spreadAngleDegrees = 30f;
+				float angleStepDegrees = spreadAngleDegrees / (numberOfProjectiles - 1);
+
+				for (int i = 0; i < numberOfProjectiles; i++)
+				{
+					Projectile projectileInstance = projectileScene.Instantiate<Projectile>();
+					projectileInstance.Position = Muzzle.GlobalPosition;
+					float currentAngleRadians = Mathf.DegToRad(-spreadAngleDegrees / 2f + i * angleStepDegrees);
+					projectileInstance.Rotation = Muzzle.Rotation + currentAngleRadians;
+					projectileInstance.Scale = Vector2.One * 3;
+					GetParent().AddChild(projectileInstance);
+				}
 			}
 		}
+		else if (Input.IsActionJustPressed("RhythmBlast"))
+		{
+			_beatPercentage = _beatPercentage > 0 ? _beatPercentage - 5 : 0;
+		}
+		
+		GD.Print($"Beat Percentage: {_beatPercentage}%");
 	}
 }
